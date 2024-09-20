@@ -9,4 +9,8 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findByIsActive(boolean b);
+
+    User findByIsActiveAndPhoneNo(boolean b, String phoneNo);
+
+    User findByIsActiveAndEmailId(boolean b, String emailId);
 }

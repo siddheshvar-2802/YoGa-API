@@ -1,6 +1,8 @@
 package com.yoga.api.controller;
 
 import com.yoga.api.entity.User;
+import com.yoga.api.exception.InvalidUserRequestException;
+import com.yoga.api.exception.UserAlreadyExistsException;
 import com.yoga.api.request.UserRequest;
 import com.yoga.api.response.UserResponse;
 import com.yoga.api.service.UserService;
@@ -23,8 +25,12 @@ public class UserController {
         try {
             User user = userService.createUser(userRequest);
             return new ResponseEntity<>(user, HttpStatus.CREATED);
+        } catch (UserAlreadyExistsException e) {
+            return new ResponseEntity<>("User already exists", HttpStatus.CONFLICT);
+        } catch (InvalidUserRequestException e) {
+            return new ResponseEntity<>("Invalid user request", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error occurred while creating user",
+            return new ResponseEntity<>("Error occurred while creating user: " + e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
